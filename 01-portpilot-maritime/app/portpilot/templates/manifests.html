@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}My Manifests &middot; PortPilot{% endblock %}
+{% block content %}
+<h1>My cargo manifests</h1>
+<p class="hint">Manifests assigned to your account.</p>
+<table>
+  <thead>
+    <tr><th>#</th><th>Vessel</th><th>Cargo</th><th>Tonnes</th><th>Consignee</th></tr>
+  </thead>
+  <tbody>
+    {% for m in manifests %}
+      <tr>
+        <td>{{ m[0] }}</td>
+        <td>{{ m[1] }}</td>
+        <td>{{ m[2] }}</td>
+        <td>{{ "%.1f"|format(m[3]) }}</td>
+        <td>{{ m[4] }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5" class="empty">You have no manifests assigned.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

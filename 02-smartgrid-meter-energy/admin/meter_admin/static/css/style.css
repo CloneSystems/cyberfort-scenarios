@@ -1,0 +1,49 @@
+:root {
+  --ink: #1a1d22;
+  --sun: #f6c453;
+  --steel: #283747;
+  --slate: #4a5568;
+  --bg: #f7f3e9;
+  --ok: #2e7d32;
+  --warn: #b32d2d;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+       background: var(--bg); color: var(--ink); }
+header { background: var(--steel); color: #fff; padding: 14px 28px;
+         display: flex; align-items: center; justify-content: space-between; }
+header .brand { font-weight: 600; }
+header .brand .sub { opacity: 0.7; font-weight: 400; margin-left: 8px; font-size: 0.85em; }
+header nav { display: flex; gap: 18px; align-items: center; font-size: 0.95em; }
+header nav a { color: var(--sun); text-decoration: none; }
+header nav a:hover { text-decoration: underline; }
+header nav .who { opacity: 0.7; color: #fff; }
+header nav .logout { color: #f4a896; }
+main { max-width: 1100px; margin: 32px auto; padding: 0 24px; }
+h1 { color: var(--steel); margin-top: 0; }
+h2 { color: var(--steel); margin-top: 24px; }
+.hint { color: #555; margin-bottom: 14px; }
+.empty { color: #888; padding: 12px; }
+
+.login-card { max-width: 380px; margin: 60px auto; background: #fff;
+  border: 1px solid #ddd; padding: 28px; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.login-card label { display: block; margin: 12px 0 6px; font-size: 0.9em; color: #444; }
+.login-card input { width: 100%; padding: 9px 10px; border: 1px solid #c4c4c4; border-radius: 4px; }
+.login-card button { margin-top: 18px; width: 100%; background: var(--steel); color: var(--sun);
+  border: 0; padding: 11px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+.err { background: #fdecea; color: #6e1f12; border: 1px solid #f5b8af; padding: 8px 12px; border-radius: 4px; }
+.ok  { background: #e6f4ea; color: #1b4d1f; border: 1px solid #b8dec0; padding: 8px 12px; border-radius: 4px; }
+
+table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #ddd; }
+th, td { padding: 9px 12px; border-bottom: 1px solid #eee; text-align: left; }
+th { background: #eee2c4; color: var(--steel); }
+
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.78em; background: #ddd; color: #333; }
+.badge.day { background: #fff3cd; color: #5b3300; }
+.badge.night { background: #d6e0f5; color: #1c2d6b; }
+
+.upload { background: #fff; border: 1px dashed #999; padding: 16px; border-radius: 6px; margin: 10px 0; }
+.upload button { background: var(--steel); color: var(--sun); border: 0; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
+.listing { background: #fff; border: 1px solid #ddd; padding: 12px 24px; border-radius: 4px; }
+
+footer { text-align: center; padding: 30px 0; color: #888; font-size: 0.82em; }

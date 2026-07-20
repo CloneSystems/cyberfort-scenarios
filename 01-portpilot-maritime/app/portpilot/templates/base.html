@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}PortPilot{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header>
+    <div class="brand">⚓ PortPilot <span class="sub">Maritime Operations Console</span></div>
+    {% if user %}
+      <nav>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('vessels') }}">Vessels</a>
+        <a href="{{ url_for('manifests') }}">My Manifests</a>
+        <span class="who">{{ user.username }} ({{ user.role }})</span>
+        <a class="logout" href="{{ url_for('logout') }}">Logout</a>
+      </nav>
+    {% endif %}
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    PortPilot v0.9.2 &middot; Larnaca Port Authority &middot; build {{ 'a1b2c3'|upper }}
+  </footer>
+</body>
+</html>

@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Docker runtime artefacts
+**/uploads/*
+!**/uploads/.gitkeep
+
+# Local env / secrets (real ones — the .env.example files are checked in)
+.env
+.env.local
+*.pem
+*.key
+
+# Editor / OS junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Local scratch
+*.log
+/tmp/

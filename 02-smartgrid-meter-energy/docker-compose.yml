@@ -1,0 +1,54 @@
+services:
+  admin:
+    build: ./admin
+    container_name: smartgrid_admin
+    restart: unless-stopped
+    environment:
+      MQTT_HOST: mqtt
+      MODBUS_HOST: modbus
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mqtt
+      - modbus
+    networks:
+      - grid
+
+  mqtt:
+    image: eclipse-mosquitto:2.0
+    container_name: smartgrid_mqtt
+    restart: unless-stopped
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    # NOTE: MQTT broker is intentionally bound to the host with anonymous
+    # access enabled. This is a deliberate misconfiguration.
+    ports:
+      - "1883:1883"
+    networks:
+      - grid
+
+  modbus:
+    build: ./modbus
+    container_name: smartgrid_modbus
+    restart: unless-stopped
+    # NOTE: Modbus TCP has no authentication by design. The service is
+    # exposed to all interfaces for the cyber range to discover it.
+    ports:
+      - "5020:5020"
+    networks:
+      - grid
+
+  telemetry:
+    build: ./telemetry
+    container_name: smartgrid_telemetry
+    restart: unless-stopped
+    environment:
+      MQTT_HOST: mqtt
+    depends_on:
+      - mqtt
+    networks:
+      - grid
+
+networks:
+  grid:
+    driver: bridge

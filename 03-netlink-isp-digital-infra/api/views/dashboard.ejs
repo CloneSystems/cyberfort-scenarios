@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard &middot; NetLink</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+           background: #eef1f6; color: #1a1d22; margin: 0; }
+    header { background: #2d2a64; color: #fff; padding: 12px 28px;
+             display: flex; justify-content: space-between; align-items: center; }
+    header nav a { color: #ffd45e; text-decoration: none; margin-left: 18px; }
+    main { max-width: 900px; margin: 28px auto; padding: 0 24px; }
+    h1 { color: #2d2a64; margin-top: 0; }
+    .hint { color: #555; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #ddd; margin-top: 14px; }
+    th, td { padding: 9px 12px; border-bottom: 1px solid #eee; text-align: left; }
+    th { background: #e3e7f3; color: #2d2a64; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.78em; }
+    .badge.paid { background: #c8e6c9; color: #1b4d1f; }
+    .badge.unpaid { background: #ffe0b2; color: #5b3300; }
+    .badge.overdue { background: #ffcdd2; color: #6e1f12; }
+    .card { background: #fff; border: 1px solid #ddd; padding: 18px 22px; border-radius: 6px; margin-bottom: 18px; }
+  </style>
+</head>
+<body>
+<header>
+  <div>NetLink Telco <span style="opacity:0.7;font-weight:400">customer portal</span></div>
+  <nav>
+    <span style="opacity:0.7;color:#fff"><%= user.username %> (<%= user.role %>)</span>
+    <a href="/logout">Logout</a>
+  </nav>
+</header>
+<main>
+  <h1>Hello, <%= user.username %></h1>
+  <div class="card">
+    <strong>Your plan:</strong> <%= plan %><br>
+    <span class="hint">Service status: nominal &middot; next bill: <%= nextBill %></span>
+  </div>
+
+  <h2>Your invoices</h2>
+  <% if (invoices && invoices.length) { %>
+  <table>
+    <thead><tr><th>#</th><th>Period</th><th>Amount (EUR)</th><th>Status</th></tr></thead>
+    <tbody>
+      <% invoices.forEach(function(inv) { %>
+        <tr>
+          <td><a href="/api/invoices/<%= inv.id %>">#<%= inv.id %></a></td>
+          <td><%= inv.period %></td>
+          <td><%= inv.amount_eur %></td>
+          <td><span class="badge <%= inv.status %>"><%= inv.status %></span></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% } else { %>
+  <p class="hint">No invoices on file.</p>
+  <% } %>
+</main>
+</body>
+</html>

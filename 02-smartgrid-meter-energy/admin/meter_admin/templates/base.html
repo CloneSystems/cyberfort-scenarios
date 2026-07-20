@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}SmartGrid Meter Admin{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header>
+  <div class="brand">⚡ SmartGrid <span class="sub">Meter Operations Console</span></div>
+  {% if user %}
+  <nav>
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('firmware') }}">Firmware</a>
+    <span class="who">{{ user }}</span>
+    <a class="logout" href="{{ url_for('logout') }}">Logout</a>
+  </nav>
+  {% endif %}
+</header>
+<main>{% block content %}{% endblock %}</main>
+<footer>SmartGrid Meter Admin v1.3.0 &middot; Larnaca Energy Co-op &middot; build f8e2-r3</footer>
+</body>
+</html>

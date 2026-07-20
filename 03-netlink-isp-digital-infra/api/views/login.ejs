@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sign in &middot; NetLink</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+           background: #eef1f6; color: #1a1d22; margin: 0; }
+    header { background: #2d2a64; color: #fff; padding: 12px 28px; font-weight: 600; }
+    header .sub { opacity: 0.7; font-weight: 400; margin-left: 8px; font-size: 0.85em; }
+    main { max-width: 380px; margin: 60px auto; }
+    .card { background: #fff; border: 1px solid #ddd; padding: 28px; border-radius: 6px; }
+    h1 { color: #2d2a64; margin-top: 0; }
+    label { display: block; margin: 12px 0 6px; font-size: 0.9em; color: #444; }
+    input { width: 100%; padding: 9px 10px; border: 1px solid #c4c4c4; border-radius: 4px; box-sizing: border-box; }
+    button { margin-top: 18px; width: 100%; background: #2d2a64; color: #fff;
+             border: 0; padding: 11px; border-radius: 4px; cursor: pointer; }
+    .err { background: #fdecea; color: #6e1f12; border: 1px solid #f5b8af;
+           padding: 8px 12px; border-radius: 4px; margin-bottom: 10px; }
+    .hint { color: #555; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+<header>NetLink Telco <span class="sub">customer portal</span></header>
+<main>
+  <div class="card">
+    <h1>Sign in</h1>
+    <p class="hint">Use your NetLink customer credentials.</p>
+    <% if (error) { %><div class="err"><%= error %></div><% } %>
+    <form method="post" action="/login">
+      <label>Username <input name="username" required autofocus></label>
+      <label>Password <input type="password" name="password" required></label>
+      <button type="submit">Sign in</button>
+    </form>
+  </div>
+</main>
+</body>
+</html>

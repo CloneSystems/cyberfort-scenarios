@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Meter #{{ meter_id }} registers{% endblock %}
+{% block content %}
+<h1>Meter #{{ meter_id }} — Modbus holding registers</h1>
+<p class="hint">Live read from the meter over Modbus TCP.</p>
+<table>
+  <thead><tr><th>#</th><th>Description</th><th>Raw value</th></tr></thead>
+  <tbody>
+  {% set labels = ["power_w", "voltage_L1_x10", "voltage_L2_x10", "voltage_L3_x10",
+                   "current_L1_x100", "current_L2_x100", "current_L3_x100",
+                   "total_kwh_high", "total_kwh_low", "firmware_version"] %}
+  {% for v in values %}
+    <tr>
+      <td>{{ loop.index0 }}</td>
+      <td>{{ labels[loop.index0] }}</td>
+      <td><code>{{ v }}</code></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p><a href="{{ url_for('dashboard') }}">&laquo; Back to dashboard</a></p>
+{% endblock %}

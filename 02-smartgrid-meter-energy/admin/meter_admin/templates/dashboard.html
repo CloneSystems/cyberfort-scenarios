@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Dashboard &middot; SmartGrid{% endblock %}
+{% block content %}
+<h1>Fleet telemetry</h1>
+<p class="hint">Latest MQTT samples from each meter. Click a meter to read its Modbus registers.</p>
+{% if telemetry %}
+<table>
+  <thead><tr><th>Meter</th><th>Power (W)</th><th>Voltage (V)</th><th>Total kWh</th><th>Tariff</th><th>Registers</th></tr></thead>
+  <tbody>
+    {% for meter_id, t in telemetry.items() %}
+      <tr>
+        <td>{{ meter_id }}</td>
+        <td>{{ t.power_w }}</td>
+        <td>{{ t.voltage_v }}</td>
+        <td>{{ t.kwh }}</td>
+        <td><span class="badge {{ t.tariff }}">{{ t.tariff }}</span></td>
+        <td>
+          <a href="{{ url_for('meter_registers', meter_id=loop.index) }}">Read Modbus #{{ loop.index }}</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">Waiting for telemetry...</p>
+{% endif %}
+{% endblock %}

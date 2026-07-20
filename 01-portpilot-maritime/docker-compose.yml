@@ -1,0 +1,46 @@
+services:
+  app:
+    build: ./app
+    container_name: portpilot_app
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - portpilot
+
+  db:
+    image: postgres:13
+    container_name: portpilot_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: portpilot
+      POSTGRES_USER: portpilot_app
+      POSTGRES_PASSWORD: "PortPilot2024!"
+    # NOTE: the database port is bound to all interfaces on the host
+    # so the cyber-range trainee can find it during an Nmap sweep.
+    # This is a deliberate misconfiguration for the training scenario.
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - portpilot_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portpilot_app -d portpilot"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    networks:
+      - portpilot
+
+networks:
+  portpilot:
+    driver: bridge
+
+volumes:
+  portpilot_data:

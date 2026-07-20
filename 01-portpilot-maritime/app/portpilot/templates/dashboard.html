@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Dashboard &middot; PortPilot{% endblock %}
+{% block content %}
+<h1>Arrivals</h1>
+<p class="hint">Next vessels expected at Larnaca anchorage.</p>
+<table>
+  <thead>
+    <tr><th>IMO</th><th>Name</th><th>Flag</th><th>Status</th><th>ETA</th></tr>
+  </thead>
+  <tbody>
+    {% for v in vessels %}
+      <tr>
+        <td>{{ v[0] }}</td>
+        <td>{{ v[1] }}</td>
+        <td>{{ v[2] }}</td>
+        <td><span class="badge {{ v[3]|lower }}">{{ v[3] }}</span></td>
+        <td>{{ v[4] }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

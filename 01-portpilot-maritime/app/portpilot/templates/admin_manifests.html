@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin · Manifests</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<main>
+<h1>All manifests (admin view)</h1>
+<p class="hint">Internal — confidential cargo notes included.</p>
+<table>
+  <thead>
+    <tr><th>#</th><th>Vessel</th><th>Cargo</th><th>Tonnes</th><th>Consignee</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    {% for m in manifests %}
+      <tr>
+        <td>{{ m[0] }}</td>
+        <td>{{ m[1] }}</td>
+        <td>{{ m[2] }}</td>
+        <td>{{ "%.1f"|format(m[3]) }}</td>
+        <td>{{ m[4] }}</td>
+        <td>{{ m[5] }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</main>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Vessels &middot; PortPilot{% endblock %}
+{% block content %}
+<form method="get" class="search">
+  <input type="search" name="q" placeholder="Search by vessel name or IMO" autofocus>
+  <button type="submit">Search</button>
+</form>
+{{ heading }}
+<table>
+  <thead>
+    <tr><th>IMO</th><th>Name</th><th>Flag</th><th>Status</th><th>ETA</th></tr>
+  </thead>
+  <tbody>
+    {% for v in results %}
+      <tr>
+        <td>{{ v[0] }}</td>
+        <td>{{ v[1] }}</td>
+        <td>{{ v[2] }}</td>
+        <td><span class="badge {{ v[3]|lower }}">{{ v[3] }}</span></td>
+        <td>{{ v[4] }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5" class="empty">No vessels match your search.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

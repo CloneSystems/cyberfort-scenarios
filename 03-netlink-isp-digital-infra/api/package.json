@@ -1,0 +1,18 @@
+{
+  "name": "netlink-customer-portal",
+  "version": "2.4.1",
+  "description": "NetLink Telco — customer self-service portal",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "4.16.0",
+    "jsonwebtoken": "8.5.0",
+    "lodash": "4.17.20",
+    "ejs": "3.1.5",
+    "body-parser": "1.18.0",
+    "cookie-parser": "1.4.5",
+    "pg": "8.7.1"
+  }
+}
