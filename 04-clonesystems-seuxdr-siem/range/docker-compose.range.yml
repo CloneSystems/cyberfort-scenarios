@@ -1,0 +1,42 @@
+# Scenario 04 — cyber-range overlay for the SEUXDR target.
+#
+# Apply on top of the product's own compose file, from the product directory:
+#
+#   docker compose -f docker-compose.yml \
+#     -f /path/to/04-clonesystems-seuxdr-siem/range/docker-compose.range.yml up -d
+#
+# deploy.sh does not use this file. It edits the product's compose directly,
+# because two of the three range adjustments cannot be expressed as an overlay:
+#
+#   * The mandatory NVIDIA device reservation cannot be REMOVED by an overlay —
+#     compose merges the devices sequence rather than clearing it, so a host
+#     with no GPU still fails to start Ollama. deploy.sh strips the block by
+#     indentation instead.
+#   * The pulled model name appears inside the ollama command string and the
+#     healthcheck, which an overlay would have to restate in full.
+#
+# What is left here is what overlays are actually good at: trimming resources
+# for a smaller range VM without touching the product's file at all.
+
+services:
+  # Cap the manager so one runaway container cannot take the VM with it. The
+  # product needs privileged mode for systemd, so this is a blast-radius limit,
+  # not a security boundary.
+  manager:
+    mem_limit: 8g
+    cpus: 4.0
+
+  frontend:
+    mem_limit: 512m
+    cpus: 1.0
+
+  # Halve the Ollama ceiling for a 16GB range VM. Only viable with a small
+  # model — set RANGE_MODEL=phi3:mini in .env before deploying, or the phi4:14b
+  # healthcheck will never pass.
+  ollama:
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G

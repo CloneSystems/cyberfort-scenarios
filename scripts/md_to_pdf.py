@@ -5,12 +5,47 @@ Usage:  python3 md_to_pdf.py file1.md file2.md ...
 Outputs:  file1.pdf, file2.pdf in the same directory as the source.
 """
 
+import os
+import shutil
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
 import markdown
+
+CHROME_CANDIDATES = (
+    "google-chrome",
+    "google-chrome-stable",
+    "chromium",
+    "chromium-browser",
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/Applications/Chromium.app/Contents/MacOS/Chromium",
+)
+
+
+def find_chrome() -> str:
+    """Locate a headless-capable Chrome. Set CHROME_BIN to override."""
+    override = os.environ.get("CHROME_BIN")
+    if override:
+        return override
+    for cand in CHROME_CANDIDATES:
+        found = shutil.which(cand) if "/" not in cand else (cand if Path(cand).exists() else None)
+        if found:
+            return found
+    # Playwright ships "Google Chrome for Testing"; use it if it is installed.
+    cache = Path.home() / "Library/Caches/ms-playwright"
+    if not cache.is_dir():
+        cache = Path.home() / ".cache/ms-playwright"
+    if cache.is_dir():
+        for pattern in ("chromium-*/chrome-*/Google Chrome for Testing.app/Contents/MacOS/*",
+                        "chromium-*/chrome-linux/chrome"):
+            for hit in sorted(cache.glob(pattern), reverse=True):
+                if hit.is_file():
+                    return str(hit)
+    raise RuntimeError(
+        "No Chrome/Chromium found. Install Google Chrome or set CHROME_BIN=/path/to/chrome."
+    )
 
 CSS = """
 @page {
@@ -143,7 +178,7 @@ def md_to_pdf(md_path: Path) -> Path:
     try:
         subprocess.run(
             [
-                "google-chrome",
+                find_chrome(),
                 "--headless=new",
                 "--no-sandbox",
                 "--disable-gpu",

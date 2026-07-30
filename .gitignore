@@ -29,3 +29,6 @@ Thumbs.db
 # Local scratch
 *.log
 /tmp/
+
+# Office lock files
+~$*
