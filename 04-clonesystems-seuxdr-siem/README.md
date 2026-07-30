@@ -19,12 +19,13 @@ Both figures were read from the live platform. The full record, including the ni
 04-clonesystems-seuxdr-siem/
 ├── README.md                            ← this file (deployment + pilot setup)
 ├── docs/
+│   ├── TRAINEE_HANDBOOK.md              ← 2-hour trainee exercise, remediated product only
 │   ├── PILOT_RUNBOOK.md                 ← the operator walkthrough, Steps 0–12
 │   ├── CRA_CONFORMITY_MAPPING.md         ← product evidence → CRA objectives → the 52 conformity questions
 │   ├── ASSESSOR_GUIDE.md                ← answer key, verification commands, review rubric
 │   ├── REMEDIATION_BACKLOG.md           ← ranked gap → fix plan, with sprint 1 marked closed
 │   ├── PILOT_TIMELINE.md                ← the 7% → 70% record: what changed and what moved
-│   └── screenshots/                     ← captured from the live platform at access.cyber-fort.eu
+│   └── screenshots/                     ← platform captures + topology and CRA-hierarchy diagrams
 ├── presentation/
 │   ├── 31072026_clone_systems_pilot.pptx ← the pilot review deck, on the CYBERFORT template
 │   ├── 31072026_clone_systems_pilot.pdf
@@ -33,8 +34,15 @@ Both figures were read from the live platform. The full record, including the ni
     ├── README.md                        ← modes, resource costs, the GPU problem
     ├── .env.example                     ← host IP, ports, which product ref to deploy
     ├── deploy.sh · verify.sh · reset.sh
+    ├── fetch-source.sh                  ← builds the trainee's source archive at a ref
     └── docker-compose.range.yml
 ```
+
+**Two audiences, two documents.** [`docs/PILOT_RUNBOOK.md`](docs/PILOT_RUNBOOK.md) is the manufacturer's own end-to-end pass — it establishes the baseline, remediates and re-assesses, and it produced the 7% → 70% record. [`docs/TRAINEE_HANDBOOK.md`](docs/TRAINEE_HANDBOOK.md) is a two-hour cyber-range exercise for a trainee acting as an **independent conformity assessor** against the **remediated product only**: they are told the manufacturer claims 70%, and asked to verify it and find the residual gaps. Assessing a product that mostly passes is the harder and more realistic skill, and it is the one a notified body actually performs.
+
+The trainee needs the source, not the running stack — `range/fetch-source.sh` produces `seuxdr-3.4.0-<sha>-src.zip` at the remediated ref for upload to the three source-side scanners. Only Step 5 of the handbook, which tests the access-control claim with `curl`, needs a deployed target.
+
+![Scenario 04 range topology](docs/screenshots/diagram-topology.png)
 
 **Why there is no `docker-compose.yml` here.** Scenarios 01–03 ship one because the target *is* the scenario — a purpose-built vulnerable app that exists only for the exercise. Scenario 04's target is a shipping commercial product with its own repository, compose file and build. Vendoring a copy would fork the product and go stale on its first release, so `range/` fetches it at a pinned reference instead and adapts it for a range VM. See [`range/README.md`](range/README.md).
 
