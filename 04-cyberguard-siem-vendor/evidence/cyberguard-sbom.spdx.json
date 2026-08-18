@@ -1,0 +1,46 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "CyberGuard SIEM Manager v1.0.0 SBOM",
+  "documentNamespace": "https://cyberguard.example/sbom/cyberguard-siem-1.0.0",
+  "creationInfo": {
+    "created": "2026-07-01T09:00:00Z",
+    "creators": ["Organization: CyberGuard Labs SME s.à r.l.", "Tool: cyclonedx-gomod-1.5.0"],
+    "licenseListVersion": "3.22"
+  },
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-Package-cyberguard-manager",
+      "name": "cyberguard-siem",
+      "versionInfo": "1.0.0",
+      "supplier": "Organization: CyberGuard Labs SME s.à r.l.",
+      "downloadLocation": "https://github.com/CyberGuardEU/t4.4_siem_ai_remediation",
+      "filesAnalyzed": false,
+      "licenseConcluded": "Apache-2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-go-stdlib",
+      "name": "go-stdlib",
+      "versionInfo": "1.21.5",
+      "supplier": "Organization: The Go Authors",
+      "downloadLocation": "https://go.dev/",
+      "filesAnalyzed": false,
+      "licenseConcluded": "BSD-3-Clause"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-alpine",
+      "name": "alpine",
+      "versionInfo": "3.19.1",
+      "supplier": "Organization: Alpine Linux",
+      "downloadLocation": "https://alpinelinux.org/",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT"
+    }
+  ],
+  "relationships": [
+    { "spdxElementId": "SPDXRef-DOCUMENT", "relationshipType": "DESCRIBES", "relatedSpdxElement": "SPDXRef-Package-cyberguard-manager" },
+    { "spdxElementId": "SPDXRef-Package-cyberguard-manager", "relationshipType": "DEPENDS_ON", "relatedSpdxElement": "SPDXRef-Package-go-stdlib" },
+    { "spdxElementId": "SPDXRef-Package-cyberguard-manager", "relationshipType": "RUNTIME_DEPENDENCY_OF", "relatedSpdxElement": "SPDXRef-Package-alpine" }
+  ]
+}

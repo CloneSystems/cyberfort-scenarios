@@ -7,6 +7,7 @@ A set of three deliberately-vulnerable training exercises that showcase the **Cy
 | 1 | `01-portpilot-maritime/`         | **Maritime**             | **CRA** (Cyber Resilience Act, Annex I + Vuln. Handling) | Flask + PostgreSQL                          | Nmap + ZAP + Semgrep + OSV + CRA conformity assessment + AI assistant |
 | 2 | `02-smartgrid-meter-energy/`     | **Energy**               | **NIS2** (Article 21(2) measures)                       | Flask admin + Mosquitto MQTT + Modbus TCP   | Nmap (OT ports) + ZAP + Semgrep + OSV + NIS2 assessment |
 | 3 | `03-netlink-isp-digital-infra/`  | **Digital infrastructure** | **ISO 27001:2022** (Annex A gap analysis)            | Node.js Express + PostgreSQL                | Nmap + ZAP + Semgrep (Node.js) + OSV (npm) + ISO 27001 assessment + JWT-forgery chain |
+| 4 | `04-cyberguard-siem-vendor/`     | **Cybersecurity product (SME manufacturer)** | **CRA** (Annex I + Vuln Handling — manufacturer side) | Go landing-page (1 container) + evidence bundle | CRA conformity workflow, evidence attachment, AI-assisted remediation drafting |
 
 ## Range topology
 
@@ -73,3 +74,4 @@ Each scenario is intentionally vulnerable. **Run only on an isolated cyber-range
 * ✓ Scenario 01 (PortPilot Maritime, CRA): complete, smoke-tested, PDFs rendered.
 * ✓ Scenario 02 (SmartGrid Meter Energy, NIS2): complete, smoke-tested, PDFs rendered.
 * ✓ Scenario 03 (NetLink ISP Digital Infrastructure, ISO 27001): complete, smoke-tested, PDFs rendered.
+* ✓ Scenario 04 (CyberGuard SIEM Vendor, CRA — manufacturer side): complete, smoke-tested, PDFs rendered.

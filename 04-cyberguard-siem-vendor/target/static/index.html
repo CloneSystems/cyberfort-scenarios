@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CyberGuard SIEM Manager v1.0</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <div class="brand">🛡️ CyberGuard <span class="sub">SIEM Manager v1.0</span></div>
+  <nav>
+    <a href="/">Overview</a>
+    <a href="/api/version" target="_blank">API</a>
+    <a href="/docs">Docs</a>
+  </nav>
+</header>
+<main>
+  <section class="hero">
+    <h1>CyberGuard SIEM Manager</h1>
+    <p class="lead">Reference build v1.0.0 — a compact host-based intrusion-detection manager for SME security operations.</p>
+    <p class="hint">This is the compliance-evaluation reference build. The <em>full</em> CyberGuard product ships with agents, an AI SOC-analyst assistant, and Wazuh integration — see the vendor documentation.</p>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h3>Product classification</h3>
+      <p><strong>CRA Annex III — Class II</strong> important product with digital elements: <em>security software (network protection or intrusion detection/prevention systems)</em>.</p>
+    </div>
+    <div class="card">
+      <h3>Vendor</h3>
+      <p>CyberGuard Labs SME s.à r.l.<br>Cyprus &middot; small enterprise &middot; 24 employees</p>
+    </div>
+    <div class="card">
+      <h3>Placed on market</h3>
+      <p>Target: <strong>Q3 2026</strong>. This lab exercise is the pre-market CRA conformity assessment.</p>
+    </div>
+    <div class="card">
+      <h3>Support period</h3>
+      <p>60 months from release (CRA Article 13(8)).</p>
+    </div>
+  </section>
+
+  <section class="capabilities">
+    <h2>What the product does</h2>
+    <ul>
+      <li>Ingests logs from endpoint agents (Linux syslog/journald, Windows Event Log, macOS unified log).</li>
+      <li>Correlates events into alerts and forwards to an OpenSearch/Elasticsearch backend.</li>
+      <li>Provides a web UI for the SOC analyst to review alerts.</li>
+      <li>Runs active-response scripts on registered agents (block IP, kill process, quarantine file).</li>
+      <li>Optional local AI-assisted incident triage (opt-in, no cloud calls).</li>
+    </ul>
+  </section>
+</main>
+<footer>
+  CyberGuard SIEM Manager v1.0.0 &middot; CRA reference build &middot; api: <code>/api/version</code>
+</footer>
+</body>
+</html>
