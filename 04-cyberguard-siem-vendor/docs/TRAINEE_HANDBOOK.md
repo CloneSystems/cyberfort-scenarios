@@ -21,11 +21,11 @@ Your engineering team has already produced the required artefacts (SBOM, penetra
 
 You have:
 
-* A virtual machine running CyberFort (`https://<VM1-IP>:5173`) — or access to the hosted reference instance at `https://access.cyber-fort.eu/login`.
-* A virtual machine running the CyberGuard reference build (`http://<VM2-IP>:8080`).
-* An evidence bundle on VM2 under `/srv/cyberguard/evidence/`.
+* **CyberFort** running at `https://cyberfort.range.local:5173/` (or the hosted reference instance at `https://access.cyber-fort.eu/login`).
+* **The real CyberGuard SIEM** — already installed by the range admin — running at `https://siem.range.local:8080/`. This is the product going through CRA conformity.
+* An evidence bundle at `/srv/cyberfort-scenarios/04-cyberguard-siem-vendor/evidence/` on the CyberFort VM.
 
-![Scenario 04 topology — CyberFort assessing the CyberGuard product](screenshots/diagram-topology.png)
+![Scenario 04 topology — CyberFort assessing the real CyberGuard SIEM](screenshots/diagram-topology.png)
 
 > ℹ️ **This scenario is not about finding vulnerabilities.** It is about learning how to conduct a CRA conformity assessment for a security product using CyberFort. All the engineering work has already been done; you are the auditor / compliance officer.
 
@@ -42,29 +42,33 @@ You have:
 
 ---
 
-## Step 0 — Verify the target is up
+## Step 0 — Confirm you can reach the product
 
-On VM2:
+Open the CyberGuard SIEM web console in a browser:
 
-```bash
-cd /srv/cyberguard-scenario/04-cyberguard-siem-vendor
-docker compose ps
+```
+https://siem.range.local:8080/
 ```
 
-You should see one container `cyberguard_manager` running. Open `http://<VM2-IP>:8080/`:
+You will be prompted to accept a self-signed certificate (the SIEM is running with a locally-issued cert). Accept it — this is the pre-market reference build.
 
-![The CyberGuard SIEM Manager v1.0 product landing page](screenshots/app/app-01-landing.png)
+Confirm the product identity from the CyberFort VM:
 
-This is the product going through CRA conformity. Take a moment to note:
+```bash
+curl -k -s https://siem.range.local:8443/api/version
+```
 
-* **Product classification:** CRA Annex III Class II — security software (intrusion detection).
-* **Vendor:** CyberGuard Labs SME s.à r.l. — small Cyprus enterprise (24 employees).
-* **Support period:** 60 months from release (CRA Article 13(8)).
-* **Machine-readable version endpoint:** `/api/version`.
+Note:
 
-![The /api/version endpoint — machine-readable product identification](screenshots/app/app-02-version-json.png)
+* **Product name:** `CyberGuard SIEM Manager`
+* **Version:** `1.0.0`
+* **Vendor:** `CyberGuard Labs SME s.à r.l.`
 
-The evidence bundle lives at `/srv/cyberguard-scenario/04-cyberguard-siem-vendor/evidence/`:
+You will register **exactly these values** as the asset in CyberFort in Step 1.
+
+Take a moment to review the CyberGuard capabilities in the console — endpoint agents, alert stream, active-response scripts, optional AI SOC-analyst triage. This is a **CRA Annex III Class II** product (security software — network protection / intrusion detection).
+
+The evidence bundle lives at `/srv/cyberfort-scenarios/04-cyberguard-siem-vendor/evidence/`:
 
 ```text
 evidence/
@@ -79,6 +83,8 @@ You will attach these to the assessment answers as you go.
 ---
 
 ## Step 1 — Register CyberGuard as an asset in CyberFort
+
+Sign in to CyberFort at `https://cyberfort.range.local:5173/` (or the hosted reference instance).
 
 1. From the left sidebar, expand **Assets / Products** and click **Manage Assets**.
 
@@ -95,7 +101,7 @@ You will attach these to the assessment answers as you go.
    * **Status:** `Active`
    * **Economic Operator:** `Manufacturer`
    * **Criticality:** `ANNEX III - IMPORTANT PRODUCTS WITH DIGITAL ELEMENTS - Class II` (or the closest available)
-   * **IP Address / URL:** `<VM2-IP>` (the CyberGuard host)
+   * **IP Address / URL:** `siem.range.local` (the CyberGuard host)
    * **Description:** "CyberGuard SIEM Manager v1.0 — SME-focused host-based intrusion detection system with AI-assisted incident triage. Being prepared for EU-market release under the CRA."
 
    ![Add New Asset modal — filled](screenshots/step1-03-add-asset-modal-filled.png)
@@ -190,16 +196,16 @@ That combined pack is the **CRA conformity technical documentation** you would s
 
 ---
 
-## Step 5 — Optional: run the CyberFort scanners against the target
+## Step 5 — Optional: run the CyberFort scanners against the SIEM
 
-If you want to see the platform's scanners for yourself, point them at `http://<VM2-IP>:8080/`:
+If you want to demonstrate the platform's scanners for yourself, point them at `siem.range.local`:
 
-* **Security Tools → Security Scanners → Network Vulnerability tab** — Nmap. Only `:8080/http` is exposed (the product's admin interface is deliberately not exposed here).
-* **Security Tools → Security Scanners → Application Vulnerability tab** — ZAP. Passive scan will find some information disclosures on `/api/version`; nothing high-severity.
-* **Security Tools → Code Analysis** — upload `target/main.go` if you have source access; Semgrep runs clean on the reference build.
-* **Security Tools → Dependency Check** — upload `evidence/cyberguard-sbom.spdx.json` or the Go module manifest; expect a clean result on the reference build.
+* **Security Tools → Security Scanners → Network Vulnerability tab** — Nmap against `siem.range.local`. Expect to see `:8080` (frontend), `:8443` (API), `:8081` (mTLS agent registration), and `:11434` (Ollama) open.
+* **Security Tools → Security Scanners → Application Vulnerability tab** — ZAP against `https://siem.range.local:8080/`.
+* **Security Tools → Code Analysis** — upload the CyberGuard source tarball (`git clone` on the SIEM VM, then `tar czf`); Semgrep will flag the "stripped auth" cases the vendor documents openly.
+* **Security Tools → Dependency Check** — upload `go.mod` from the SIEM source; OSV against Go modules.
 
-These are **optional** — the CRA assessment does not require them, but they demonstrate the CyberFort scanner surface for future evidence gathering.
+These scans are **not required** to close the CRA assessment (which is evidence-based), but they are a good sanity check that reinforces what the pen-test report already covers.
 
 ---
 
@@ -213,6 +219,7 @@ These are **optional** — the CRA assessment does not require them, but they de
 
 ## Checklist
 
+* [ ] Confirmed reachability of `https://siem.range.local:8080/`
 * [ ] CyberGuard SIEM Manager v1.0 registered as an asset (Annex III Class II)
 * [ ] CyberGuard CRA Conformity assessment created and opened
 * [ ] All 16 target questions answered with evidence attached

@@ -10,9 +10,29 @@ This document is **not** for trainees. It contains the intended answers to the C
 
 ## 1. Scenario topology
 
-![Scenario 04 topology — VM1 CyberFort assessing VM2 CyberGuard](screenshots/diagram-topology.png)
+![Scenario 04 topology — CyberFort VM assessing the CyberGuard SIEM VM](screenshots/diagram-topology.png)
 
-The reference build on VM2 exists so the CyberFort scanners have something concrete to point at. It is **not** a vulnerable target. Trainees who scan it should find a clean result (or at most low-severity info findings), which reinforces that the scenario is about the CRA conformity flow, not exploitation.
+Two VMs on the training subnet:
+
+| Host | Role |
+|------|------|
+| `cyberfort.range.local` | CyberFort platform — the tool the trainee uses. |
+| `siem.range.local` | Real CyberGuard SIEM installed by the range admin from [`github.com/CyberGuardEU/t4.4_siem_ai_remediation`](https://github.com/CyberGuardEU/t4.4_siem_ai_remediation). |
+
+The SIEM VM must be running before the session — the trainee never touches its install. If the range admin needs to redeploy:
+
+```bash
+git clone https://github.com/CyberGuardEU/t4.4_siem_ai_remediation.git
+cd t4.4_siem_ai_remediation
+./setup-docker.sh              # 10–15 min, interactive
+```
+
+Verify reachability from the CyberFort VM:
+
+```bash
+curl -k -s -o /dev/null -w "HTTP %{http_code}\n" https://siem.range.local:8080/
+curl -k -s https://siem.range.local:8443/api/version
+```
 
 ---
 
@@ -77,7 +97,7 @@ Verbatim question texts extracted from `frameworks_seed.py` (CRA conformity pool
 
 At the end of the scenario the CyberFort tenant should contain:
 
-* One asset: `CyberGuard SIEM Manager 1.0.0` (Manufacturer, Annex III Class II).
+* One asset: `CyberGuard SIEM Manager 1.0.0` (Manufacturer, Annex III Class II, IP `siem.range.local`).
 * One CRA Conformity assessment: `CyberGuard CRA Conformity` with 16 questions answered and evidence attached.
 * A generated **CRA readiness PDF** exported from the Assessments toolbar.
 
@@ -89,9 +109,10 @@ At the end of the scenario the CyberFort tenant should contain:
 
 | Activity | Points |
 |----------|--------|
+| SIEM console reachable and product identity confirmed | 5 |
 | Asset registered with correct CRA classification (Annex III Class II) | 10 |
 | CRA Conformity assessment created and scoped to the asset | 10 |
-| All 16 target questions answered | 40 (2.5 pts each) |
+| All 16 target questions answered | 35 (~2 pts each) |
 | Evidence attached to at least 12 of the 16 answers | 15 |
 | AI assistant used on at least one question (ideally Q17) | 10 |
 | Readiness PDF exported | 10 |
@@ -109,16 +130,17 @@ Pass threshold: 70.
 | Answers all questions without attaching evidence | Fail — CRA notified-body review requires evidence, not just answers. |
 | Registers CyberGuard as `Importer` or `Distributor` instead of `Manufacturer` | CyberGuard Labs is the manufacturer per the scenario brief. Wrong operator role = wrong CRA obligations. |
 | Selects Framework `NIS2` instead of `CRA` | NIS2 is operator-side. This product is being placed on the EU market — CRA applies. |
-| Scans the target and files "no findings" as a risk | The scenario is not about exploitation. Scans are optional; a clean result is fine. |
+| Tries to install the SIEM themselves | The SIEM VM is already provisioned by the range admin — the trainee only assesses it. |
+| Scans the SIEM and files "no findings" as a risk | The scenario is not about exploitation. Scans are optional; a clean(ish) result is fine. |
 
 ---
 
-## 8. Reset between sessions
+## 8. Range-admin operations
 
-```bash
-cd /srv/cyberguard-scenario/04-cyberguard-siem-vendor
-docker compose down
-docker compose up -d --build
-```
+| Task | Command / location |
+|------|--------------------|
+| Restart the SIEM after a lab session | `cd t4.4_siem_ai_remediation && docker compose restart` on `siem.range.local` |
+| Full reset (drop DB, regenerate certs) | `./clear-db.sh && ./delete-certs.sh && ./setup-docker.sh` |
+| Reset the CyberFort tenant | Delete the `CyberGuard SIEM Manager` asset and the `CyberGuard CRA Conformity` assessment via the platform UI |
 
-The container has no persistent volume, so every restart is factory-fresh. To reset the CyberFort tenant, delete the `CyberGuard SIEM Manager` asset and the `CyberGuard CRA Conformity` assessment via the platform UI.
+The SIEM VM should stay powered across sessions — reprovisioning is 10–15 min.
